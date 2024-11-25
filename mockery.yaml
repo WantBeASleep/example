@@ -1,0 +1,7 @@
+all: True
+case: underscore
+with-expecter: True
+dir: lib
+keeptree: True
+exported: True
+disable-version-string: True

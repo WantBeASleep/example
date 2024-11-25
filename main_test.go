@@ -23,24 +23,24 @@ func TestDoSmtNotMock(t *testing.T) {
 func TestDoSmtWithMock(t *testing.T) {
 	content := "123"
 
-	fileSrv := &mocklib.File{}
+	// fileSrv := &mocklib.File{}
+	fileSrv := mocklib.NewFile(t)
+
 	fileSrv.EXPECT().FileColor(mock.MatchedBy(func (f *os.File) bool {
-		stat, err := f.Stat()
+		openF, err := os.Open(f.Name())
+		assert.NoError(t, err)
+		stat, err := openF.Stat()
 		assert.NoError(t, err)
 
 		return assert.Equal(t, int64(3), stat.Size())
 	})).Return(lib.Red, nil)
 
 	srv := mocklib.NewService(t)
-	srv.EXPECT().MakeFromFile(mock.MatchedBy(func (f *os.File) bool {
-		stat, err := f.Stat()
-		assert.NoError(t, err)
-
-		return assert.Equal(t, int64(3), stat.Size())
-	})).Return(fileSrv)
+	srv.EXPECT().MakeFromFile().Return(fileSrv)
 
 	color, err := trash.DoSmt(srv, content)
 	assert.NoError(t, err)
 
 	assert.Equal(t, lib.Red, color)
+	// fileSrv.AssertExpectations(t)
 }

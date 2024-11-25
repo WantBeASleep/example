@@ -1,13 +1,12 @@
 package lib
 
 import (
-	"fmt"
 	"io"
 	"os"
 )
 
 type Service interface {
-	MakeFromFile(*os.File) File
+	MakeFromFile() File
 }
 
 func NewService() Service {
@@ -15,10 +14,7 @@ func NewService() Service {
 }
 
 type service struct {}
-func (*service) MakeFromFile(f *os.File) File {
-	_, err := f.Stat()
-	fmt.Println(err)
-
+func (*service) MakeFromFile() File {
 	return new(file)
 }
 

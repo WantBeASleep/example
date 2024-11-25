@@ -3,7 +3,6 @@
 package mocks
 
 import (
-	os "os"
 	lib "trash/internal/lib"
 
 	mock "github.com/stretchr/testify/mock"
@@ -22,17 +21,17 @@ func (_m *Service) EXPECT() *Service_Expecter {
 	return &Service_Expecter{mock: &_m.Mock}
 }
 
-// MakeFromFile provides a mock function with given fields: _a0
-func (_m *Service) MakeFromFile(_a0 *os.File) lib.File {
-	ret := _m.Called(_a0)
+// MakeFromFile provides a mock function with given fields:
+func (_m *Service) MakeFromFile() lib.File {
+	ret := _m.Called()
 
 	if len(ret) == 0 {
 		panic("no return value specified for MakeFromFile")
 	}
 
 	var r0 lib.File
-	if rf, ok := ret.Get(0).(func(*os.File) lib.File); ok {
-		r0 = rf(_a0)
+	if rf, ok := ret.Get(0).(func() lib.File); ok {
+		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(lib.File)
@@ -48,14 +47,13 @@ type Service_MakeFromFile_Call struct {
 }
 
 // MakeFromFile is a helper method to define mock.On call
-//   - _a0 *os.File
-func (_e *Service_Expecter) MakeFromFile(_a0 interface{}) *Service_MakeFromFile_Call {
-	return &Service_MakeFromFile_Call{Call: _e.mock.On("MakeFromFile", _a0)}
+func (_e *Service_Expecter) MakeFromFile() *Service_MakeFromFile_Call {
+	return &Service_MakeFromFile_Call{Call: _e.mock.On("MakeFromFile")}
 }
 
-func (_c *Service_MakeFromFile_Call) Run(run func(_a0 *os.File)) *Service_MakeFromFile_Call {
+func (_c *Service_MakeFromFile_Call) Run(run func()) *Service_MakeFromFile_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*os.File))
+		run()
 	})
 	return _c
 }
@@ -65,7 +63,7 @@ func (_c *Service_MakeFromFile_Call) Return(_a0 lib.File) *Service_MakeFromFile_
 	return _c
 }
 
-func (_c *Service_MakeFromFile_Call) RunAndReturn(run func(*os.File) lib.File) *Service_MakeFromFile_Call {
+func (_c *Service_MakeFromFile_Call) RunAndReturn(run func() lib.File) *Service_MakeFromFile_Call {
 	_c.Call.Return(run)
 	return _c
 }

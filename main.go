@@ -24,8 +24,9 @@ func DoSmt(colorSrv lib.Service, content string) (lib.Color, error) {
 
 	file, err := os.CreateTemp("", "test-file-*.tmp")
 	defer func(){
-		fmt.Println("А Я ВЫПОЛНИЛСЯ АХАХХАХАХ")
+		fmt.Println("закрылся файл + удалился")
 		file.Close()
+		os.Remove(file.Name())
 	}()
 	if err != nil {
 		return "", err
@@ -33,18 +34,19 @@ func DoSmt(colorSrv lib.Service, content string) (lib.Color, error) {
 	file.WriteString(content)
 	file.Seek(0, io.SeekStart)
 
-	_, closeErr := file.Stat()
-	fmt.Println("ЗАКРЫТ ЛИ ФАЙЛ?:", closeErr)
+	fileSrv := srv.colorSrv.MakeFromFile()
 	
-	fileSrv := srv.colorSrv.MakeFromFile(file)
-	fmt.Println("MAKE_FROM_FILE!")
-	_, closeErr = file.Stat()
-	fmt.Println("ЗАКРЫТ ЛИ ФАЙЛ?VV2:", closeErr)
+	_, closeErr := file.Stat()
+	fmt.Println("закрыт ли файл перед моком?", closeErr)
 	
 	color, err := fileSrv.FileColor(file)
+	fmt.Println("FileColor do")
 	if err != nil {
 		return "", err
 	}
-
+	
+	_, closeErr = file.Stat()
+	fmt.Println("закрыт ли файл после мока?", closeErr)
+	
 	return color, err
 }
